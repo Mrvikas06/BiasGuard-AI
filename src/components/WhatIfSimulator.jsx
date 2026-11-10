@@ -7,12 +7,16 @@ export default function WhatIfSimulator({ applicant }) {
 
     if (!applicant) return null;
 
-    const run = () => { setResults(runWhatIf(applicant)); setOpen(true); };
+    const run = () => {
+        setResults(runWhatIf(applicant));
+        setOpen(true);
+    };
 
     const maxScore = results ? Math.max(...results.map(r => r.score)) : 0;
     const minScore = results ? Math.min(...results.map(r => r.score)) : 0;
     const swing = maxScore - minScore;
-    const flips = results ? results.filter(r => r.decision !== results.find(x => x.isOriginal)?.decision).length : 0;
+    const originalDecision = results?.find(x => x.isOriginal)?.decision;
+    const flips = results ? results.filter(r => r.decision !== originalDecision).length : 0;
 
     return (
         <div className="card p-6 anim-up" style={{ animationDelay: '0.3s' }}>
@@ -69,7 +73,7 @@ export default function WhatIfSimulator({ applicant }) {
                             </thead>
                             <tbody>
                                 {results.map((r, i) => (
-                                    <tr key={i} className={r.isOriginal ? 'current' : ''}>
+                                    <tr key={`${r.gender}-${r.location}`} className={r.isOriginal ? 'current' : ''}>
                                         <td>
                                             <div className="flex items-center gap-2">
                                                 <span style={{ color: '#f4f4f5', fontWeight: 500 }}>{r.gender}</span>
