@@ -25,13 +25,13 @@ const BIAS_FACTORS = {
  * Calculate raw score for an applicant (0–100)
  */
 export function calculateScore(applicant) {
-    const eduScore = EDUCATION_SCORES[applicant.education] || 5;
-    const expScore = getExperienceScore(applicant.experience);
-    const locationBias = BIAS_FACTORS.location[applicant.location] || 0;
-    const genderBias = BIAS_FACTORS.gender[applicant.gender] || 0;
+    const eduScore = EDUCATION_SCORES[applicant?.education] ?? 5;
+    const expScore = getExperienceScore(Number(applicant?.experience) || 0);
+    const locationBias = BIAS_FACTORS.location[applicant?.location] ?? 0;
+    const genderBias = BIAS_FACTORS.gender[applicant?.gender] ?? 0;
 
     const baseScore = eduScore + expScore;
-    const totalScore = Math.min(100, baseScore + locationBias + genderBias);
+    const totalScore = Math.min(100, Math.max(0, baseScore + locationBias + genderBias));
 
     return {
         totalScore,
@@ -39,10 +39,10 @@ export function calculateScore(applicant) {
         locationBias,
         genderBias,
         breakdown: {
-            education: { label: applicant.education, points: eduScore },
-            experience: { label: `${applicant.experience} years`, points: expScore },
-            locationBias: { label: applicant.location, points: locationBias },
-            genderBias: { label: applicant.gender, points: genderBias },
+            education: { label: applicant?.education || 'Unknown', points: eduScore },
+            experience: { label: `${applicant?.experience ?? 0} years`, points: expScore },
+            locationBias: { label: applicant?.location || 'Unknown', points: locationBias },
+            genderBias: { label: applicant?.gender || 'Unknown', points: genderBias },
         },
     };
 }
@@ -152,6 +152,7 @@ export function detectBias(applicant) {
 export function runWhatIf(applicant) {
     const genders = ['Male', 'Female', 'Other'];
     const locations = ['Urban', 'Rural'];
+    const originalResult = simulateDecision(applicant);
 
     const results = [];
     for (const gender of genders) {
@@ -159,14 +160,14 @@ export function runWhatIf(applicant) {
             const variant = { ...applicant, gender, location };
             const result = simulateDecision(variant);
             const isOriginal =
-                gender === applicant.gender && location === applicant.location;
+                gender === applicant?.gender && location === applicant?.location;
             results.push({
                 gender,
                 location,
                 score: result.totalScore,
                 decision: result.decision,
                 isOriginal,
-                scoreDiff: result.totalScore - simulateDecision(applicant).totalScore,
+                scoreDiff: result.totalScore - originalResult.totalScore,
             });
         }
     }
