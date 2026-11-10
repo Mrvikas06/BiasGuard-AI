@@ -8,6 +8,19 @@ const AUDITS = [
 ];
 
 export default function AuditTable() {
+    const handleExportCSV = () => {
+        const headers = ['Model Name,Scan Date,Bias Score,Risk Level,Status'];
+        const rows = AUDITS.map(a => `"${a.model}","${a.date}",${a.score},"${a.risk}","${a.status}"`);
+        const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'biasguard_audit_history.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="dash-card anim-up" style={{ animationDelay: '0.35s' }}>
             <div className="dash-card-header">
@@ -15,8 +28,14 @@ export default function AuditTable() {
                     <div className="dash-card-title">Recent Audit History</div>
                     <div className="dash-card-subtitle">Last 30 days · {AUDITS.length} audits completed</div>
                 </div>
-                <button className="btn-ghost" style={{ padding: '6px 14px' }}>
-                    <span style={{ fontSize: '0.6875rem' }}>Export ↗</span>
+                <button
+                    onClick={handleExportCSV}
+                    className="btn-ghost"
+                    style={{ padding: '6px 14px' }}
+                    title="Export Audit History to CSV"
+                    aria-label="Export Audit History to CSV"
+                >
+                    <span style={{ fontSize: '0.6875rem' }}>Export CSV ↗</span>
                 </button>
             </div>
             <div style={{ borderRadius: 14, overflow: 'hidden' }}>
@@ -32,7 +51,7 @@ export default function AuditTable() {
                     </thead>
                     <tbody>
                         {AUDITS.map((row, i) => (
-                            <tr key={i} className="anim-slide" style={{ animationDelay: `${0.45 + i * 0.06}s` }}>
+                            <tr key={row.model} className="anim-slide" style={{ animationDelay: `${0.45 + i * 0.06}s` }}>
                                 <td>
                                     <span style={{ fontWeight: 600, color: '#f4f4f5' }}>{row.model}</span>
                                 </td>
