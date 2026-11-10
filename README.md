@@ -89,16 +89,17 @@
 
 ```
 BiasGuard-AI/
-├── public/                  # Static assets
+├── public/                  # Favicon and static files
 ├── src/
 │   ├── components/
+│   │   ├── AnimatedNumber.jsx   # RAF-powered smooth number counter
 │   │   ├── Sidebar.jsx          # Dark glassmorphism sidebar navigation
 │   │   ├── TopBar.jsx           # Search, notifications, live status
 │   │   ├── KPICards.jsx         # 4 animated metric cards
 │   │   ├── BiasChart.jsx        # Horizontal bar chart + sparkline trend
 │   │   ├── AlertsPanel.jsx      # Alert cards + donut chart
-│   │   ├── AuditTable.jsx       # Audit history data table
-│   │   ├── InputForm.jsx        # Applicant profile form
+│   │   ├── AuditTable.jsx       # Audit history data table with CSV export
+│   │   ├── InputForm.jsx        # Applicant profile form with quick presets
 │   │   ├── DecisionCard.jsx     # Decision result + score ring
 │   │   ├── BiasScoreMeter.jsx   # Circular bias gauge
 │   │   ├── ExplanationPanel.jsx # Bias findings with impact levels
@@ -108,8 +109,11 @@ BiasGuard-AI/
 │   │   ├── biasEngine.js        # Core bias detection logic
 │   │   └── gemini.js            # Google Gemini API client
 │   ├── App.jsx                  # Main dashboard controller
-│   └── index.css                # Premium dark-mode design system
-├── .env                         # API keys (not committed)
+│   ├── index.css                # Premium dark-mode design system
+│   └── main.jsx                 # Application entry point
+├── test/
+│   └── biasEngine.test.js       # Comprehensive unit test suite
+├── .env.example                 # Environment template
 ├── .gitignore
 ├── index.html
 ├── package.json
@@ -135,8 +139,12 @@ cd BiasGuard-AI
 # Install dependencies
 npm install
 
-# Create environment file
-echo "VITE_GEMINI_API_KEY=your_api_key_here" > .env
+# Setup environment file
+cp .env.example .env
+# Add your Gemini API key inside .env
+
+# Run unit tests
+npm test
 
 # Start development server
 npm run dev
@@ -144,9 +152,13 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Build for Production
+### Build & Lint
 
 ```bash
+# Run ESLint check
+npm run lint
+
+# Build for production
 npm run build
 ```
 
