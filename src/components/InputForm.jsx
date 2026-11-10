@@ -4,6 +4,13 @@ const GENDERS = ['Male', 'Female', 'Other'];
 const LOCATIONS = ['Urban', 'Rural'];
 const EDUCATIONS = ['High School', 'Bachelors', 'Masters', 'PhD'];
 
+const SAMPLE_PROFILES = [
+    { label: 'Elena', name: 'Elena Rostova', gender: 'Female', location: 'Rural', education: 'Masters', experience: 4 },
+    { label: 'Marcus', name: 'Marcus Vance', gender: 'Male', location: 'Urban', education: 'Bachelors', experience: 6 },
+    { label: 'Samira', name: 'Samira Khan', gender: 'Female', location: 'Urban', education: 'PhD', experience: 8 },
+    { label: 'Jordan', name: 'Jordan Reed', gender: 'Other', location: 'Rural', education: 'High School', experience: 3 },
+];
+
 export default function InputForm({ onSubmit }) {
     const [form, setForm] = useState({
         name: '', gender: 'Female', location: 'Rural', education: 'Bachelors', experience: 2,
@@ -11,14 +18,24 @@ export default function InputForm({ onSubmit }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: name === 'experience' ? parseInt(value) || 0 : value }));
+        setForm((prev) => ({ ...prev, [name]: name === 'experience' ? parseInt(value, 10) || 0 : value }));
+    };
+
+    const handleLoadSample = (sample) => {
+        setForm({
+            name: sample.name,
+            gender: sample.gender,
+            location: sample.location,
+            education: sample.education,
+            experience: sample.experience,
+        });
     };
 
     const handleSubmit = (e) => { e.preventDefault(); onSubmit(form); };
 
     return (
         <form onSubmit={handleSubmit} className="card card-highlight p-6 anim-up">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center"
                         style={{ background: 'rgba(168,85,247,0.1)' }}>
@@ -31,38 +48,66 @@ export default function InputForm({ onSubmit }) {
                         <p style={{ fontSize: '0.6875rem', color: 'rgba(228,228,231,0.3)' }}>Enter data for audit</p>
                     </div>
                 </div>
-                <span className="tag tag-purple">NEW</span>
+                <span className="tag tag-purple">AUDIT</span>
+            </div>
+
+            {/* Quick Preset Buttons */}
+            <div className="mb-4">
+                <div style={{ fontSize: '0.625rem', color: 'rgba(228,228,231,0.35)', marginBottom: 6 }}>
+                    Quick Presets:
+                </div>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {SAMPLE_PROFILES.map((p) => (
+                        <button
+                            key={p.label}
+                            type="button"
+                            onClick={() => handleLoadSample(p)}
+                            style={{
+                                fontSize: '0.625rem',
+                                padding: '3px 8px',
+                                borderRadius: 6,
+                                background: form.name === p.name ? 'rgba(168,85,247,0.2)' : 'rgba(255,255,255,0.04)',
+                                border: form.name === p.name ? '1px solid #a855f7' : '1px solid rgba(255,255,255,0.06)',
+                                color: form.name === p.name ? '#f4f4f5' : 'rgba(228,228,231,0.6)',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                            }}
+                        >
+                            {p.label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <div className="space-y-4">
                 <div>
-                    <label className="label block mb-1.5">Full Name</label>
-                    <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Alex Rivera" className="input-field" required />
+                    <label htmlFor="applicant-name" className="label block mb-1.5">Full Name</label>
+                    <input id="applicant-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Alex Rivera" className="input-field" required />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div>
-                        <label className="label block mb-1.5">Gender</label>
-                        <select name="gender" value={form.gender} onChange={handleChange} className="input-field">
+                        <label htmlFor="applicant-gender" className="label block mb-1.5">Gender</label>
+                        <select id="applicant-gender" name="gender" value={form.gender} onChange={handleChange} className="input-field">
                             {GENDERS.map(g => <option key={g}>{g}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="label block mb-1.5">Location</label>
-                        <select name="location" value={form.location} onChange={handleChange} className="input-field">
+                        <label htmlFor="applicant-location" className="label block mb-1.5">Location</label>
+                        <select id="applicant-location" name="location" value={form.location} onChange={handleChange} className="input-field">
                             {LOCATIONS.map(l => <option key={l}>{l}</option>)}
                         </select>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div>
-                        <label className="label block mb-1.5">Education</label>
-                        <select name="education" value={form.education} onChange={handleChange} className="input-field">
+                        <label htmlFor="applicant-education" className="label block mb-1.5">Education</label>
+                        <select id="applicant-education" name="education" value={form.education} onChange={handleChange} className="input-field">
                             {EDUCATIONS.map(e => <option key={e}>{e}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="label block mb-1.5">Experience (yrs)</label>
-                        <input type="number" name="experience" value={form.experience} onChange={handleChange} min="0" max="30" className="input-field" />
+                        <label htmlFor="applicant-experience" className="label block mb-1.5">Experience (yrs)</label>
+                        <input id="applicant-experience" type="number" name="experience" value={form.experience} onChange={handleChange} min="0" max="30" className="input-field" />
                     </div>
                 </div>
             </div>
