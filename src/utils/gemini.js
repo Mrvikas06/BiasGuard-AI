@@ -9,6 +9,13 @@ const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
  * Analyze bias audit results using Gemini AI
  */
 export async function analyzeWithGemini(applicant, result, biasData) {
+    if (!API_KEY || API_KEY.trim() === '' || API_KEY === 'your_api_key_here') {
+        return {
+            success: false,
+            text: '⚠️ **Gemini API Key Required**\n\nTo generate live AI fairness reports and mitigation recommendations:\n1. Obtain an API key from [Google AI Studio](https://aistudio.google.com/apikey)\n2. Set `VITE_GEMINI_API_KEY=your_key` in your `.env` file\n3. Restart the dev server (`npm run dev`)',
+        };
+    }
+
     const prompt = `You are BiasGuard AI, an expert AI fairness auditor. Analyze this bias audit result and provide actionable insights.
 
 ## Applicant Profile
@@ -57,11 +64,12 @@ Keep it concise and professional. No more than 200 words total.`;
         return { success: true, text: response.text() };
     } catch (error) {
         console.error('Gemini API error:', error);
-        const shortMsg = error.message?.includes('quota')
-            ? 'API quota exceeded. Try again in a minute.'
-            : error.message?.includes('API_KEY')
-                ? 'Invalid API key. Check your Gemini API key.'
-                : `Connection error: ${error.message?.slice(0, 80) || 'Unknown'}`;
+        const message = error?.message || '';
+        const shortMsg = message.includes('quota')
+            ? 'API quota exceeded. Please try again in a few moments.'
+            : message.includes('API_KEY') || message.includes('key')
+                ? 'Invalid Gemini API key. Please check your VITE_GEMINI_API_KEY in .env.'
+                : `AI analysis connection error: ${message.slice(0, 80) || 'Unable to connect'}.`;
         return { success: false, text: shortMsg };
     }
 }
