@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 
 export default function GeminiInsights({ analysis }) {
+    const [prevAnalysis, setPrevAnalysis] = useState(analysis);
     const [displayed, setDisplayed] = useState('');
     const [done, setDone] = useState(false);
 
-    useEffect(() => {
-        if (!analysis) return;
+    if (analysis !== prevAnalysis) {
+        setPrevAnalysis(analysis);
         setDisplayed('');
         setDone(false);
+    }
+
+    useEffect(() => {
+        if (!analysis?.text) return;
 
         const text = analysis.text;
         let i = 0;
