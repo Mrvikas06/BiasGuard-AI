@@ -25,14 +25,15 @@ export default function App() {
     setApplicant(formData);
     const simResult = simulateDecision(formData);
     const biasResult = detectBias(formData);
-    setResult(simResult);
+    const auditId = Math.floor(1000 + Math.random() * 9000);
+    setResult({ ...simResult, auditId });
     setBiasData(biasResult);
     setGeminiAnalysis(null);
     setGeminiLoading(true);
     try {
       const analysis = await analyzeWithGemini(formData, simResult, biasResult);
       setGeminiAnalysis(analysis);
-    } catch (e) {
+    } catch {
       setGeminiAnalysis({ success: false, text: 'Failed to connect to Gemini AI.' });
     } finally {
       setGeminiLoading(false);
@@ -83,7 +84,7 @@ export default function App() {
                   <div className="card p-5 anim-up mt-4" style={{ animationDelay: '0.12s' }}>
                     <div className="flex items-center justify-between mb-3">
                       <span className="label">Score Breakdown</span>
-                      <span style={{ fontSize: '0.5rem', color: 'rgba(228,228,231,0.25)', fontVariantNumeric: 'tabular-nums' }}>audit #{Math.floor(Math.random() * 9000) + 1000}</span>
+                      <span style={{ fontSize: '0.5rem', color: 'rgba(228,228,231,0.25)', fontVariantNumeric: 'tabular-nums' }}>audit #{result.auditId}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2.5">
                       {[
