@@ -1,15 +1,4 @@
-import { useEffect, useState } from 'react';
-
-function AnimNum({ value, duration = 900 }) {
-    const [d, setD] = useState(0);
-    useEffect(() => {
-        let s = 0; const e = parseInt(value);
-        const step = Math.max(1, Math.ceil(e / (duration / 16)));
-        const t = setInterval(() => { s += step; if (s >= e) { setD(e); clearInterval(t); } else setD(s); }, 16);
-        return () => clearInterval(t);
-    }, [value, duration]);
-    return <>{d}</>;
-}
+import AnimatedNumber from './AnimatedNumber';
 
 export default function BiasScoreMeter({ biasData }) {
     if (!biasData) return null;
@@ -50,7 +39,7 @@ export default function BiasScoreMeter({ biasData }) {
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <span style={{ fontSize: '1.875rem', fontWeight: 900, color: p.c, fontVariantNumeric: 'tabular-nums', textShadow: `0 0 20px ${p.glow}` }}>
-                            <AnimNum value={biasScore} />
+                            <AnimatedNumber value={biasScore} />
                         </span>
                         <span style={{ fontSize: '0.5625rem', color: 'rgba(228,228,231,0.3)' }}>/100</span>
                     </div>

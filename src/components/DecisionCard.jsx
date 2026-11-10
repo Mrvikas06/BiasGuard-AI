@@ -1,21 +1,4 @@
-import { useEffect, useState } from 'react';
-
-function AnimatedNumber({ value, duration = 800 }) {
-    const [display, setDisplay] = useState(0);
-    useEffect(() => {
-        let start = 0;
-        const end = parseInt(value);
-        if (start === end) { setDisplay(end); return; }
-        const step = Math.ceil(end / (duration / 16));
-        const timer = setInterval(() => {
-            start += step;
-            if (start >= end) { setDisplay(end); clearInterval(timer); }
-            else setDisplay(start);
-        }, 16);
-        return () => clearInterval(timer);
-    }, [value, duration]);
-    return <>{display}</>;
-}
+import AnimatedNumber from './AnimatedNumber';
 
 export default function DecisionCard({ result }) {
     if (!result) return null;

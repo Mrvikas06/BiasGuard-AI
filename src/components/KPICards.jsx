@@ -1,19 +1,4 @@
-import { useEffect, useState } from 'react';
-
-function AnimNum({ target, duration = 1200 }) {
-    const [val, setVal] = useState(0);
-    useEffect(() => {
-        let start = 0;
-        const step = Math.max(1, Math.ceil(target / (duration / 16)));
-        const t = setInterval(() => {
-            start += step;
-            if (start >= target) { setVal(target); clearInterval(t); }
-            else setVal(start);
-        }, 16);
-        return () => clearInterval(t);
-    }, [target, duration]);
-    return <>{val.toLocaleString()}</>;
-}
+import AnimatedNumber from './AnimatedNumber';
 
 const KPIS = [
     {
@@ -89,7 +74,7 @@ export default function KPICards() {
                     </div>
                     <div className="kpi-label">{kpi.label}</div>
                     <div className="kpi-value" style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                        <AnimNum target={kpi.value} />
+                        <AnimatedNumber value={kpi.value} formatLocale={true} />
                         {kpi.suffix && <span style={{ fontSize: '0.875rem', color: 'rgba(228,228,231,0.35)', fontWeight: 600 }}>{kpi.suffix}</span>}
                     </div>
                     {kpi.trend && (
