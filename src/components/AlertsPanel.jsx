@@ -67,13 +67,13 @@ export default function AlertsPanel() {
                     <svg width="110" height="110" viewBox="0 0 36 36">
                         <circle cx="18" cy="18" r="15.5" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
                         <circle cx="18" cy="18" r="15.5" fill="none" stroke="#4ade80" strokeWidth="3.5"
-                            strokeDasharray="40 60" strokeDashoffset="25" strokeLinecap="round"
+                            pathLength="100" strokeDasharray="40 60" strokeDashoffset="25" strokeLinecap="round"
                             className="anim-gauge" style={{ animationDelay: '0.5s', filter: 'drop-shadow(0 0 3px rgba(74,222,128,0.4))' }} />
                         <circle cx="18" cy="18" r="15.5" fill="none" stroke="#fbbf24" strokeWidth="3.5"
-                            strokeDasharray="25 75" strokeDashoffset="85" strokeLinecap="round"
+                            pathLength="100" strokeDasharray="35 65" strokeDashoffset="-15" strokeLinecap="round"
                             className="anim-gauge" style={{ animationDelay: '0.6s', filter: 'drop-shadow(0 0 3px rgba(251,191,36,0.4))' }} />
                         <circle cx="18" cy="18" r="15.5" fill="none" stroke="#f87171" strokeWidth="3.5"
-                            strokeDasharray="15 85" strokeDashoffset="60" strokeLinecap="round"
+                            pathLength="100" strokeDasharray="25 75" strokeDashoffset="-50" strokeLinecap="round"
                             className="anim-gauge" style={{ animationDelay: '0.7s', filter: 'drop-shadow(0 0 3px rgba(248,113,113,0.4))' }} />
                     </svg>
                     <div className="donut-legend">
